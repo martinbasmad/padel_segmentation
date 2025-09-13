@@ -13,13 +13,18 @@ def main():
     if not os.path.exists(filepath):
         raise FileNotFoundError(f"No se encuentra el archivo de entrada: {filepath}")
 
-    name, ext = os.path.splitext(os.path.basename(filepath))
-    mask_path = os.path.join("data", f"{name}_mask{ext}")
-    overlay_path = os.path.join("data", f"{name}_overlay{ext}")
+    # Carpeta donde está el video de entrada
+    data_dir = os.path.dirname(filepath)
 
-    # Crear carpetas si no existen
-    os.makedirs(os.path.dirname(mask_path), exist_ok=True)
-    os.makedirs(os.path.dirname(overlay_path), exist_ok=True)
+    # Nombre base y extensión
+    name, ext = os.path.splitext(os.path.basename(filepath))
+
+    # Archivos de salida en la misma carpeta data/
+    mask_path = os.path.join(data_dir, f"{name}_mask{ext}")
+    overlay_path = os.path.join(data_dir, f"{name}_overlay{ext}")
+
+    # Crear carpeta si no existe
+    os.makedirs(data_dir, exist_ok=True)
 
     # Parámetros globales de filtrado por área (desactivados)
     pv.MIN_SIZE = 0
