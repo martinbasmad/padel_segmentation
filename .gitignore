@@ -1,0 +1,35 @@
+# === Python cache / build ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# === IDEs / Editors ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === Virtual environments ===
+.venv/
+venv/
+.env/
+
+# === System files ===
+.DS_Store
+Thumbs.db
+
+# === Video files ===
+# Evitar subir datasets y resultados pesados
+data/*.mp4
+src/data/*.mp4
+
+# === Logs / Temp ===
+*.log
+*.tmp
+*.bak

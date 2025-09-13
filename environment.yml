@@ -1,0 +1,12 @@
+name: padel
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+  - matplotlib
+  - numpy
+  - pandas
+  - seaborn
+  - jupyterlab
+  - opencv
+prefix: /home/martin/miniconda3/envs/padel
