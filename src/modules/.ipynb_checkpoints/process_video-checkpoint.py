@@ -9,6 +9,7 @@ from .build_bg_subtractor import build_bg_subtractor
 from .apply_morph import apply_morph
 from .filter_components import filter_components
 from .colorize_overlay import overlay_by_mask
+from .filter_roundness import filter_by_roundness  # ya creado por vos
 
 # Variables globales (las setea main.py)
 MIN_SIZE = 0   # <=1 desactiva mínimo
@@ -32,6 +33,9 @@ def process_video(
     overlay_alpha: float = 0.6,
     overlay_soften: int = 3,
     overlay_colormap: Optional[int] = None,  # p.ej. cv2.COLORMAP_TURBO
+    # —— Filtrado por redondez/circularidad ——
+    min_circularity: Optional[float] = None,  # e.g. 0.7
+    max_circularity: Optional[float] = None,  # e.g. 1.0
 ):
     in_path = Path(input_path)
     if not in_path.exists():
@@ -81,7 +85,7 @@ def process_video(
             if not ok:
                 break
 
-            fg = sub.apply(frame)
+            fg = sub.apply(frame, learningRate=0.005)
 
             if thresh > 0:
                 _, fg = cv2.threshold(fg, thresh, 255, cv2.THRESH_BINARY)
@@ -103,6 +107,14 @@ def process_video(
             if (MIN_SIZE and MIN_SIZE > 1) or (MAX_SIZE and MAX_SIZE > 0):
                 mask_bin = filter_components(
                     mask_bin, min_size=int(MIN_SIZE), max_size=int(MAX_SIZE)
+                )
+
+            # Filtrado por circularidad (roundness)
+            if (min_circularity is not None) or (max_circularity is not None):
+                mask_bin = filter_by_roundness(
+                    mask=mask_bin,
+                    min_circularity=min_circularity,
+                    max_circularity=max_circularity,
                 )
 
             if write_overlay:
